@@ -1,0 +1,132 @@
+<?php
+include "db_connect.php";
+session_start();
+
+if(!isset($_SESSION['email'])){
+    header("Location: log_in.php");
+    exit;
+}
+
+$email = $_SESSION['email']; // email user semasa login
+$result = mysqli_query($conn, "SELECT * FROM tablespot WHERE email='$email' ORDER BY date DESC");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Booking History</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #fff8dc;
+  margin: 0;
+  padding: 0;
+}
+.container {
+  width: 90%;
+  margin: 50px auto;
+  background-color: #f8f8c3;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+th, td {
+  border-bottom: 1px solid #ddd;
+  padding: 12px;
+}
+th {
+  background-color: #f4e76e;
+  font-weight: bold;
+}
+tr:nth-child(even) {
+  background-color: #fff;
+}
+.status {
+  font-weight: bold;
+}
+.status.verified {
+  color: green;
+}
+.status.pending {
+  color: red;
+}
+a.back {
+  display: inline-block;
+  margin: 20px 0;
+  background-color: #ffcc00;
+  color: black;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 10px;
+}
+a.back:hover {
+  background-color: #ffb700;
+}
+button {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: #ffcc00;
+  cursor: pointer;
+  font-weight: bold;
+}
+button:hover {
+  background-color: #ffb700;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Your Booking Status</h1>
+
+  <table>
+    <tr>
+      <th>No.</th>
+      <th>Date</th>
+      <th>Time</th>
+      <th>Restaurant</th>
+      <th>Pax</th>
+      <th>Status</th>
+    </tr>
+
+    <?php
+    if(mysqli_num_rows($result) > 0){
+        $no = 1;
+        while($row = mysqli_fetch_assoc($result)){
+            $statusClass = ($row['status'] == 'Verified') ? 'verified' : 'pending';
+            echo "
+            <tr>
+              <td>{$no}</td>
+              <td>{$row['date']}</td>
+              <td>{$row['time']}</td>
+              <td>{$row['restaurant_name']}</td>
+              <td>{$row['people']}</td>
+              <td class='status {$statusClass}'>{$row['status']}</td>
+            </tr>";
+            $no++;
+        }
+    } else {
+        echo "<tr><td colspan='6'>No bookings found.</td></tr>";
+    }
+    ?>
+ </table>
+</div>
+
+<button onclick="history.back()">Back</button>
+
+</body>
+</html>
