@@ -1,0 +1,131 @@
+<?php
+include "db_connect.php";
+
+if(isset($_POST['submit']))
+{
+    $restaurant_name = $_POST['restaurant_name'];
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $people = $_POST['people'];
+    $date = $_POST['date'];
+    $time = $_POST['time'];
+    $message = $_POST['message'];
+
+    $sql = "INSERT INTO tablespot(restaurant_name, name, email, phone, people, date, time, message)
+            VALUES('$restaurant_name', '$name','$email','$phone','$people','$date','$time','$message')";
+
+    if(mysqli_query($conn,$sql)){
+        echo "<script>alert('Booking Successful!'); window.location='homepage1.php';</script>";
+    } else {
+        echo "Error: " . mysqli_error($conn);
+}
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Restaurant Table Booking Registration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      width: 450px;
+      margin: 60px auto;
+      background-color: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      color: #333;
+      font-weight: bold;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #E22629;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-top: 15px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #E22629;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Book a Table</h2>
+
+    <form action="" method="POST">
+      <!-- Restaurant Name Option -->
+      <label>Restaurant Name</label>
+      <select name="restaurant_name" required>
+        <option value="">-- Select Restaurant --</option>
+        <option value="Sukiya">Sukiya</option>
+        <option value="BBQ Town">BBQ Town</option>
+        <option value="Bumbu Babah">Bumbu Babah</option>
+        <option value="Dubuyo">Dubuyo</option>
+      </select>
+
+      <label>Full Name</label>
+      <input type="text" name="name" placeholder="Enter your full name" required>
+
+      <label>Email</label>
+      <input type="email" name="email" placeholder="Enter your email" required>
+
+      <label>Phone Number</label>
+      <input type="text" name="phone" placeholder="Enter your phone number" required>
+
+      <label>Number of People</label>
+      <select name="people" required>
+        <option value="">-- Select Number of People --</option>
+        <option value="1">1 Person</option>
+        <option value="2">2 People</option>
+        <option value="3">3 People</option>
+        <option value="4">4 People</option>
+        <option value="5">5 People</option>
+        <option value="6">6 or More</option>
+      </select>
+
+      <label>Date</label>
+      <input type="date" name="date" required>
+
+      <label>Time</label>
+      <input type="time" name="time" required>
+
+      <label>Message (Optional)</label>
+      <textarea name="message" placeholder="Any special request?"></textarea>
+
+      <button type="submit" name="submit">Book Now</button>
+		<button onclick="history.back()">Back</button>
+
+		
+    </form>
+  </div>
+</body>
+</html>
