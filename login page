@@ -1,0 +1,161 @@
+<?php
+include "db_connect.php";
+session_start();
+
+if(isset($_POST['login'])){
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email=?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+
+    if($user && $password == $user['password']){
+        $_SESSION['email'] = $email;
+
+        if($email == "admin123@gmail.com"){
+            header("Location: admin_menu.php");
+        } else {
+            header("Location: homepage1.php");
+        }
+        exit;
+    } else {
+        echo "<script>alert('Invalid Login');</script>";
+    }
+}
+?>
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log_In</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #EDECDB; 
+    }
+
+    .container {
+      display: flex;
+      width: 800px;
+      height: 450px;
+      background-color: #fff;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+    }
+
+    /* Left side - Sign In */
+    .signin, .signup {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+
+    .signin {
+      background: #fff;
+    }
+
+    .signup {
+      background: #ffe6e6; 
+      color: #b30000;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    p {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    input {
+      width: 250px;
+      margin: 8px 0;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 12px 40px;
+      border: none;
+      border-radius: 25px;
+      background-color: #cc0000; 
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #a30000;
+    }
+
+    a {
+      font-size: 14px;
+      color: #666;
+      margin: 10px 0;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  .container .signup {
+    color: #000000;
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="signin">
+      <h2>Log In</h2>
+      <form action="log_in.php" method="post">
+
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit" name="login">Log In</button>
+      </form>
+    </div>
+
+    <div class="signup">
+      <h2>Welcome Back!</h2>
+      <p>To stay connected with us, please sign up with your personal info</p>
+      <button onclick="window.location.href='sign_up.php'">Sign Up</button>
+    </div>
+  </div>
+</body>
+</html>
+
