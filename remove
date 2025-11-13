@@ -1,0 +1,16 @@
+<?php
+include "db_connect.php";
+
+if (isset($_GET['id'])) {
+    $id = intval($_GET['id']);
+
+    $query = "DELETE FROM tablespot WHERE id=$id";
+    if (mysqli_query($conn, $query)) {
+        echo "<script>alert('Booking removed successfully!'); window.location.href='admin_menu.php';</script>";
+    } else {
+        echo "<script>alert('Failed to remove booking.'); window.location.href='admin_menu.php';</script>";
+    }
+} else {
+    header("Location: admin_menu.php");
+}
+?>
