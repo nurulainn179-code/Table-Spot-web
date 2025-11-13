@@ -1,0 +1,188 @@
+<?php
+include "db_connect.php"; 
+session_start();
+
+// Pastikan hanya admin boleh akses
+if(!isset($_SESSION['email']) || $_SESSION['email'] != "admin123@gmail.com"){
+    header("Location: log_in.php");
+    exit;
+}
+
+// Ambil semua data tempahan
+$booking = mysqli_query($conn, "SELECT * FROM tablespot ORDER BY date DESC");
+
+if(!$booking){
+    die("Query gagal: " . mysqli_error($conn));
+}
+?>
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>ADMIN</title>
+<style>
+body {
+    background-color: #fff8dc;
+    font-family: Arial;
+}
+.text-section {
+  font-family: Cambria;
+  text-align: center;
+  color: #000;
+  font-size: 20px;
+  text-decoration: none;
+}
+.Heading {
+    font-family: 'Poppins', sans-serif;
+    font-size: 40px;
+    font-weight: 800;
+    color: #000000;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+#recordTable {
+    border-collapse: collapse;
+    width: 90%;
+    margin: 0 auto;
+    background-color: #f8f8c3;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+#recordTable th, #recordTable td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+#recordTable th {
+    background-color: #f4e76e;
+    font-weight: bold;
+    font-size: 18px;
+}
+#recordTable tr:nth-child(even) {
+    background-color: #fafafa;
+}
+#recordTable tr:hover {
+    background-color: #fff9c4;
+    transition: 0.3s;
+}
+.verify-btn {
+  background-color: #d4edda; 
+  color: #155724; 
+  border: 1px solid #c3e6cb;
+  border-radius: 10px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 12px;
+  margin-right: 4px;
+  transition: all 0.2s ease-in-out;
+}
+.verify-btn:hover {
+  background-color: #c3e6cb;
+}
+.reject-btn {
+  background-color: #f8d7da;
+  color: #721c24; 
+  border: 1px solid #f5c6cb;
+  border-radius: 10px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s ease-in-out;
+}
+.reject-btn:hover {
+  background-color: #f1b0b7;
+}
+#recordTable td:last-child, 
+#recordTable th:last-child {
+  width: 200px; 
+  text-align: center;
+}
+</style>
+</head>
+
+<body>
+<table width="100%" border="0" cellspacing="1" cellpadding="1">
+  <tbody>
+    <tr>
+      <td width="250" align="center"><img src="images/table-removebg-preview.png" width="250" height="100" alt=""/></td>
+      <td align="right" style="padding-right: 50px;">
+        <a href="log_in.php" 
+           style="background-color: #FFF8F8;
+                  color: #000000;
+                  display: inline-block;
+                  padding: 12px 20px;
+                  font-size: 18px;
+                  border-radius: 30px;
+                  text-decoration: none;">Log Out</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+
+<main>
+  <div class="Heading" align="center"><strong>BOOKING VERIFICATION</strong></div>
+  <br>
+  <table id="recordTable">
+    <tr>
+        <th>Customer Name</th>
+        <th>Pax</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Restaurant</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+    <?php
+    // pastikan ada data
+    if (mysqli_num_rows($booking) > 0) {
+        while($row = mysqli_fetch_assoc($booking)) {
+            echo "<tr>";
+            echo "<td>{$row['name']}</td>";
+            echo "<td>{$row['people']}</td>";
+            echo "<td>{$row['date']}</td>";
+            echo "<td>{$row['time']}</td>";
+            echo "<td>{$row['restaurant_name']}</td>";
+
+            // Status warna ikut nilai
+            if ($row['status'] == 'Verified') {
+                echo "<td style='color:green; font-weight:bold;'>Verified</td>";
+            } elseif ($row['status'] == 'Rejected') {
+                echo "<td style='color:red; font-weight:bold;'>Rejected</td>";
+            } else {
+                echo "<td style='color:orange; font-weight:bold;'>Pending</td>";
+            }
+
+            echo "<td>";
+
+            // Butang tindakan
+            if ($row['status'] == 'Verified') {
+                echo "<span style='color:green; font-weight:bold;'>✔ Verified</span>";
+            } elseif ($row['status'] == 'Rejected') {
+                echo "<span style='color:red; font-weight:bold;'>✖ Rejected</span>";
+            } else {
+                echo "<a class='verify-btn' href='update_status.php?id={$row['id']}&status=Verified'>Verify</a>";
+                echo "<a class='reject-btn' href='update_status.php?id={$row['id']}&status=Rejected'>Reject</a>";
+            }
+
+            echo "</td>";
+            echo "</tr>";
+        }
+    } else {
+        echo "<tr><td colspan='7'>No bookings found.</td></tr>";
+    }
+    ?>
+  </table>
+</main>
+
+<br><br>
+<hr style="width: 100%; height: 3px; background-color: black; border: none;">
+<footer align="center">
+    <img src="images/table-removebg-preview.png" width="141" height="60" alt=""/><br>
+    TableSpot202. All Rights Reserved
+</footer>
+</body>
+</html>
