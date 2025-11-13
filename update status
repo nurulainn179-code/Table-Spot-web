@@ -1,0 +1,18 @@
+<?php
+include "db_connect.php";
+
+$id = $_GET['id'];
+$status = $_GET['status'];
+
+if ($status == 'Verified' || $status == 'Rejected') {
+    $update = mysqli_query($conn, "UPDATE tablespot SET status='$status' WHERE id=$id");
+    if ($update) {
+        header("Location: admin_menu.php");
+        exit;
+    } else {
+        echo "Error updating status: " . mysqli_error($conn);
+    }
+} else {
+    echo "Invalid status value.";
+}
+?>
