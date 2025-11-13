@@ -1,0 +1,116 @@
+<?php
+include("db_connect.php"); // sambung ke database
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Table Spot Homepage</title>
+<link rel="stylesheet" href="bootstrap-4.4.1.css">
+<style>
+html {
+  scroll-behavior: smooth;
+}
+body { font-family: Arial, sans-serif; background-color: #f9f9f9; padding-top: 70px; }
+.navbar { position: fixed; top: 0; width: 100%; z-index: 999; }
+.section { padding: 60px 20px; }
+h1, h2 { text-align: center; margin-bottom: 30px; }
+.promo-container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+.promo-card, .restaurant-card { background: #fff; padding: 15px; border-radius: 10px; width: 250px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+.promo-card img, .restaurant-card img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; }
+.btn-book { background-color: #1e90ff; color: #fff; padding: 8px 15px; border-radius: 5px; text-decoration: none; display: inline-block; margin-top: 8px; }
+.btn-book:hover { background-color: #0073e6; }
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#"><img src="images/table-removebg-preview.png" width="90" height="60" alt=""/></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarContent">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item active"><a href="http://localhost/seatify/homepage1.php" class="nav-link" >Home <span class="sr-only">(current)</span></a></li>
+       <li class="nav-item active"><a href="http://localhost/seatify/aboutus.php" class="nav-link" >About us  <span class="sr-only">(current)</span></a></li>
+      <li class="nav-item active"><a href="http://localhost/seatify/booking_table.php" class="nav-link" >Book table <span class="sr-only">(current)</span></a></li>
+      <li class="nav-item active"><a href="http://localhost/seatify/promotionpage1.php" class="nav-link" >Promotions <span class="sr-only">(current)</span></a></li>
+      <li class="nav-item active"><a href="http://localhost/seatify/bookinghistory.php" class="nav-link" >Status <span class="sr-only">(current)</span></a></li>
+      <li class="nav-item active"><a href="http://localhost/seatify/log_in.php" class="nav-link" >Logout<span class="sr-only">(current)</span></a></li>
+</td>
+    </ul>
+  </div>
+</nav>
+
+  <h1 class="text-center text-capitalize">Promotions only at Table Spot</h1>
+  <p>&nbsp;</p>
+  <div class="promo-section"></div>
+  <div class="row">
+    <div class="col-md-2">
+      <div class="card col-md-12"><img class="card-img-top" src="images/Seoul.jpg" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">Seoul Garden</h5>
+          <p class="card-text">Lunch promo only RM28</p>
+          <a href="http://localhost/seatify/booking_table.php" class="btn btn-primary">Book Now </a></div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="card col-md-12"> <img class="card-img-top" src="images/baru1.png" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">KFC</h5>
+          <br>
+          <p class="card-text">Combo plate only RM11</p>
+          <a href="http://localhost/seatify/booking_table.php" class="btn btn-primary">Book Now</a></div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="card col-md-12"> <img class="card-img-top" src="images/baru2.png" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">Secret Recipe</h5>
+          <p class="card-text">Dinner set only 12</p>
+          <a href="http://localhost/seatify/booking_table.php" class="btn btn-primary">Book Now</a></div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="card col-md-12"> <img class="card-img-top" src="images/baru3.png" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">Dubuyo</h5>
+          <p class="card-text">50% off ornly at Table Spot</p>
+          <br>
+          <a href="http://localhost/seatify/booking_table.php" class="btn btn-primary">Book Now</a></div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="card col-md-12"> <img class="card-img-top" src="images/baru4.png" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">Banana Bro</h5>
+          <p class="card-text">Buy 1 Free 1 craving set</p>
+          <br>
+          <a href="http://localhost/seatify/booking_table.php" class="btn btn-primary">Book Now</a></div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="card col-md-12"> <img class="card-img-top" src="images/baru5.png" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">Sukiya</h5>
+          <p class="card-text">Express lunch at RM19.90 with Table Spot</p>
+          <a href="http://localhost/seatify/booking_table.php" class="btn btn-primary">Book Now</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+<footer class="section" style="text-align:center; padding:20px; background:#eee;">
+  &copy; 2025 Table Spot. All Rights Reserved.
+</footer>
+
+<script src="jquery-3.4.1.min.js"></script>
+<script src="popper.min.js"></script>
+<script src="bootstrap-4.4.1.js"></script>
+</body>
+</html>
