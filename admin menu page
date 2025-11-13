@@ -2,13 +2,11 @@
 include "db_connect.php"; 
 session_start();
 
-// Pastikan hanya admin boleh akses
 if(!isset($_SESSION['email']) || $_SESSION['email'] != "admin123@gmail.com"){
     header("Location: log_in.php");
     exit;
 }
 
-// Ambil semua data tempahan
 $booking = mysqli_query($conn, "SELECT * FROM tablespot ORDER BY date DESC");
 
 if(!$booking){
@@ -137,7 +135,6 @@ body {
     </tr>
 
     <?php
-    // pastikan ada data
     if (mysqli_num_rows($booking) > 0) {
         while($row = mysqli_fetch_assoc($booking)) {
             echo "<tr>";
@@ -147,7 +144,6 @@ body {
             echo "<td>{$row['time']}</td>";
             echo "<td>{$row['restaurant_name']}</td>";
 
-            // Status warna ikut nilai
             if ($row['status'] == 'Verified') {
                 echo "<td style='color:green; font-weight:bold;'>Verified</td>";
             } elseif ($row['status'] == 'Rejected') {
@@ -158,7 +154,6 @@ body {
 
             echo "<td>";
 
-            // Butang tindakan
             if ($row['status'] == 'Verified') {
                 echo "<span style='color:green; font-weight:bold;'>✔ Verified</span>";
             } elseif ($row['status'] == 'Rejected') {
