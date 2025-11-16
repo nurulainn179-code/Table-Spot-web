@@ -1,0 +1,252 @@
+<?php
+$conn = mysqli_connect("localhost", "root", "", "tablespot");
+
+$startDate = $_POST['start_date'] ?? '';
+$endDate = $_POST['end_date'] ?? '';
+$statusFilter = $_POST['status'] ?? '';
+
+$query = "SELECT * FROM tablespot WHERE 1=1";
+
+if (!empty($startDate) && !empty($endDate)) {
+    $query .= " AND date BETWEEN '$startDate' AND '$endDate'";
+}
+
+if (!empty($statusFilter)) {
+    $query .= " AND status = '$statusFilter'";
+}
+
+$query .= " ORDER BY date DESC";
+
+$result = mysqli_query($conn, $query);
+
+$totalResult = mysqli_query($conn, "SELECT COUNT(*) AS total FROM tablespot");
+$totalRow = mysqli_fetch_assoc($totalResult);
+$totalBookings = $totalRow['total'];
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Booking Reports</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f1f3f6;
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+            padding-top: 40px;
+        }
+
+        .header {
+            background: #4c6ef5;
+            padding: 20px;
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+        }
+
+        .header h2 {
+            margin: 0;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 12px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        input, select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        button {
+            background: #4c6ef5;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #3b5bdb;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        th {
+            background: #4c6ef5;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 10px;
+            background: #ffffff;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover td {
+            background: #f5f8ff;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .status-pill {
+            padding: 6px 12px;
+            border-radius: 20px;
+            color: white;
+            font-size: 13px;
+        }
+
+        .Verified {
+            background: #37b24d;
+        }
+
+        .Rejected {
+            background: #f03e3e;
+        }
+
+        .Pending {
+            background: #f59f00;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h2>Booking Reports</h2>
+        <p>Total Bookings: <b><?php echo $totalBookings; ?></b></p>
+    
+    </div>
+
+
+    <div class="card">
+        <h3>Filter Reports</h3>
+        <form method="POST">
+            <div class="form-grid">
+                <div>
+                    <label>Start Date</label><br>
+                    <input type="date" name="start_date" value="<?php echo $startDate; ?>">
+                </div>
+
+                <div>
+                    <label>End Date</label><br>
+                    <input type="date" name="end_date" value="<?php echo $endDate; ?>">
+                </div>
+
+                <div>
+                    <label>Status</label><br>
+                    <select name="status">
+                        <option value="">All</option>
+                        <option value="Verified" <?php if ($statusFilter == 'Verified') echo 'selected'; ?>>Verified</option>
+                        <option value="Rejected" <?php if ($statusFilter == 'Rejected') echo 'selected'; ?>>Rejected</option>
+                        <option value="Pending" <?php if ($statusFilter == 'Pending') echo 'selected'; ?>>Pending</option>
+                    </select>
+                </div>
+
+                <div style="align-self: end;">
+                    <button type="submit">Apply Filter</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="card">
+        <h3>Booking Data</h3>
+
+        <?php if (mysqli_num_rows($result) > 0) { ?>
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Restaurant</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>People</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                </tr>
+
+                <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                    <tr>
+                        <td><?php echo $row['id']; ?></td>
+                        <td><?php echo $row['restaurant_name']; ?></td>
+                        <td><?php echo $row['name']; ?></td>
+                        <td><?php echo $row['email']; ?></td>
+                        <td><?php echo $row['phone']; ?></td>
+                        <td><?php echo $row['people']; ?></td>
+                        <td><?php echo $row['date']; ?></td>
+                        <td><?php echo $row['time']; ?></td>
+                        <td><?php echo $row['message']; ?></td>
+                        <td>
+                            <span class="status-pill <?php echo $row['status']; ?>">
+                                <?php echo $row['status']; ?>
+                            </span>
+                        </td>
+                    </tr>
+                <?php } ?>
+
+            </table>
+
+        <?php } else { ?>
+            <div class="no-data">No bookings found</div>
+        <?php } ?>
+
+    </div>
+    <a href="log_in.php" 
+           style="background-color: #FFF8F8;
+                  color: #000000;
+                  display: inline-block;
+                  padding: 12px 20px;
+                  font-size: 18px;
+                  border-radius: 30px;
+                  text-decoration: none;">Log Out</a>
+     <a href="admin_menu.php" 
+           style="background-color: #FFF8F8;
+                  color: #000000;
+                  display: inline-block;
+                  padding: 12px 20px;
+                  font-size: 18px;
+                  border-radius: 30px;
+                  text-decoration: none;">Back</a>
+
+</div>
+
+</body>
+</html>
